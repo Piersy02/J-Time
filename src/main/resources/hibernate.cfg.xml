@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <!-- Driver -->
+        <property name="connection.driver_class">org.h2.Driver</property>
+        <!-- Il prefisso ./data/ dice a H2 di salvare dentro la cartella 'data' -->
+        <property name="connection.url">jdbc:h2:./data/jtime_db;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE</property>
+        <property name="connection.username">admin</property>
+        <property name="connection.password">admin</property>
+
+        <!-- Dialetto SQL per H2 -->
+        <property name="dialect">org.hibernate.dialect.H2Dialect</property>
+
+        <!-- Crea automaticamente le tabelle nel database basandosi sulle classi Java -->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+
+        <!-- Mostra le query SQL nella console (utile per il debug) -->
+        <property name="show_sql">true</property>
+        <property name="format_sql">true</property>
+
+        <!-- Elenco delle classi annotate -->
+        <mapping class="it.unicam.cs.mpgc.jtime119159.model.Project"/>
+        <mapping class="it.unicam.cs.mpgc.jtime119159.model.Task"/>
+    </session-factory>
+</hibernate-configuration>
