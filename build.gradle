@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
+}
+
+group = 'it.unicam.cs.mpgc'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Database H2
+    implementation 'com.h2database:h2:2.2.224'
+
+    // Hibernate (JPA) + Jakarta
+    implementation 'org.hibernate.orm:hibernate-core:6.4.1.Final'
+    implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
+
+    // Logger
+    implementation 'org.slf4j:slf4j-simple:2.0.9'
+
+    // Lombok
+    compileOnly "org.projectlombok:lombok:1.18.32"
+    annotationProcessor "org.projectlombok:lombok:1.18.32"
+
+    // JUnit
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+javafx {
+    version = "22"
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.graphics', 'javafx.base']
+}
+
+application {
+    mainClass = 'it.unicam.cs.mpgc.jtime119159.JTimeApplication'
+}
+
+test {
+    useJUnitPlatform()
+}
