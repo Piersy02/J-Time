@@ -25,6 +25,8 @@ public class Project {
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @Builder.Default // Inizializza la lista anche con il builder
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<Task> tasks = new ArrayList<>();
 
     // Metodo di utilità per aggiungere task

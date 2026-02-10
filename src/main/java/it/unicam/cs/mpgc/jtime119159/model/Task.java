@@ -22,7 +22,7 @@ public class Task {
     private String title;
     private String description;
     private double estimatedTime; // In ore
-    private double actualTime;    // In ore (inserita a fine attività)
+    private double actualTime; // In ore (inserita a fine attività)
     private LocalDate plannedDate;
 
     @Enumerated(EnumType.STRING)
@@ -35,14 +35,11 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "project_id")
     @ToString.Exclude // Evita loop infiniti nel toString di Lombok
+    @EqualsAndHashCode.Exclude
     private Project project;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "task_tags",
-            joinColumns = @JoinColumn(name = "task_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id")
-    )
+    @JoinTable(name = "task_tags", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
     @Builder.Default
     private Set<Tag> tags = new HashSet<>();
 }

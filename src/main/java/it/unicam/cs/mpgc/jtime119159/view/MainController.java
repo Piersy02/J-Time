@@ -24,30 +24,45 @@ import java.util.Optional;
 public class MainController {
 
     // --- Componenti UI: Layout Generale ---
-    @FXML private StackPane contentArea;
-    @FXML private VBox projectsView;
+    @FXML
+    private StackPane contentArea;
+    @FXML
+    private VBox projectsView;
     // Task Universali rimosso
-    @FXML private VBox planningView;
-    @FXML private VBox reportsView;
+    @FXML
+    private VBox planningView;
+    @FXML
+    private VBox reportsView;
 
     // --- View 1: Progetti ---
-    @FXML private ListView<Project> projectListView;
-    @FXML private TableView<Task> taskTableView;
-    @FXML private TableColumn<Task, String> colTitle, colPriority, colStatus;
-    @FXML private TableColumn<Task, Double> colEstimated, colActual;
+    @FXML
+    private ListView<Project> projectListView;
+    @FXML
+    private TableView<Task> taskTableView;
+    @FXML
+    private TableColumn<Task, String> colTitle, colPriority, colStatus;
+    @FXML
+    private TableColumn<Task, Double> colEstimated, colActual;
 
     // Task Universali rimosso
 
     // --- View 3: Pianificazione ---
-    @FXML private DatePicker planningDatePicker;
-    @FXML private Label effortLabel;
-    @FXML private TableView<Task> planningTableView;
-    @FXML private TableColumn<Task, String> colPlanTitle, colPlanProject;
-    @FXML private TableColumn<Task, Double> colPlanTime;
+    @FXML
+    private DatePicker planningDatePicker;
+    @FXML
+    private Label effortLabel;
+    @FXML
+    private TableView<Task> planningTableView;
+    @FXML
+    private TableColumn<Task, String> colPlanTitle, colPlanProject;
+    @FXML
+    private TableColumn<Task, Double> colPlanTime;
 
     // --- View 4: Report ---
-    @FXML private ComboBox<Project> reportProjectCombo;
-    @FXML private TextArea reportTextArea;
+    @FXML
+    private ComboBox<Project> reportProjectCombo;
+    @FXML
+    private TextArea reportTextArea;
 
     // Dati
     private final ObservableList<Project> projectData = FXCollections.observableArrayList();
@@ -61,7 +76,8 @@ public class MainController {
 
         // Listener per cambiare i task visualizzati quando si seleziona un progetto
         projectListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != null) loadTasks(newVal);
+            if (newVal != null)
+                loadTasks(newVal);
         });
 
         // Formattazione della lista progetti (Nome + Stato)
@@ -72,17 +88,17 @@ public class MainController {
                 setText(empty ? null : item.getName() + " (" + item.getStatus().getDisplayName() + ")");
             }
         });
-        
+
         // Formattazione Combo Box Report
         reportProjectCombo.setCellFactory(lv -> new ListCell<>() {
-             @Override
+            @Override
             protected void updateItem(Project item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(empty ? null : item.getName());
             }
         });
         reportProjectCombo.setButtonCell(new ListCell<>() {
-             @Override
+            @Override
             protected void updateItem(Project item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(empty ? null : item.getName());
@@ -96,7 +112,8 @@ public class MainController {
     private void setupTableColumns() {
         // Tabella Task Progetto
         colTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
-        colPriority.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getPriority().getDisplayName()));
+        colPriority
+                .setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getPriority().getDisplayName()));
         colStatus.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getStatus().getDisplayName()));
         colEstimated.setCellValueFactory(new PropertyValueFactory<>("estimatedTime"));
         colActual.setCellValueFactory(new PropertyValueFactory<>("actualTime"));
@@ -111,13 +128,20 @@ public class MainController {
 
     // --- Navigazione ---
 
-    @FXML public void showProjectsView() { switchView(projectsView); }
-    
+    @FXML
+    public void showProjectsView() {
+        switchView(projectsView);
+    }
+
     // Task Universali rimosso
-    
-    @FXML public void showPlanningView() { switchView(planningView); }
-    
-    @FXML public void showReportsView() { 
+
+    @FXML
+    public void showPlanningView() {
+        switchView(planningView);
+    }
+
+    @FXML
+    public void showReportsView() {
         switchView(reportsView);
         reportProjectCombo.setItems(projectData);
     }
@@ -126,7 +150,7 @@ public class MainController {
         projectsView.setVisible(false);
         planningView.setVisible(false);
         reportsView.setVisible(false);
-        
+
         view.setVisible(true);
         view.toFront();
     }
@@ -139,10 +163,15 @@ public class MainController {
     }
 
     private void loadTasks(Project project) {
-        taskData.setAll(project.getTasks());
+        // Ricarica i task freschi dal DB tramite il servizio
+        // Nota: questo richiede che ci sia un metodo nel service o repository per
+        // prendere i task di un progetto
+        // Se non c'è, ricarichiamo il progetto intero
+        Project freshProject = ServiceLocator.getInstance().getProjectService().getProjectById(project.getId());
+        taskData.setAll(freshProject.getTasks());
         taskTableView.setItems(taskData);
     }
-    
+
     // Task Universali rimosso
 
     // --- Azioni Utente ---
@@ -164,7 +193,8 @@ public class MainController {
     @FXML
     private void handleCloseProject() {
         Project selected = projectListView.getSelectionModel().getSelectedItem();
-        if (selected == null) return;
+        if (selected == null)
+            return;
 
         try {
             ServiceLocator.getInstance().getProjectService().closeProject(selected);
@@ -178,9 +208,11 @@ public class MainController {
     @FXML
     private void handleDeleteProject() {
         Project selected = projectListView.getSelectionModel().getSelectedItem();
-        if (selected == null) return;
+        if (selected == null)
+            return;
 
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Eliminare il progetto '" + selected.getName() + "' e tutti i suoi task?");
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
+                "Eliminare il progetto '" + selected.getName() + "' e tutti i suoi task?");
         confirm.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 ServiceLocator.getInstance().getProjectService().deleteProject(selected);
@@ -193,7 +225,8 @@ public class MainController {
     @FXML
     private void handleReopenProject() {
         Project selected = projectListView.getSelectionModel().getSelectedItem();
-        if (selected == null) return;
+        if (selected == null)
+            return;
 
         ServiceLocator.getInstance().getProjectService().reopenProject(selected);
         loadProjects();
@@ -237,7 +270,8 @@ public class MainController {
     @FXML
     private void handleCompleteTask() {
         Task selected = taskTableView.getSelectionModel().getSelectedItem();
-        if (selected == null) return;
+        if (selected == null)
+            return;
 
         TextInputDialog dialog = new TextInputDialog("0.0");
         dialog.setTitle("Completa Attività");
@@ -254,31 +288,26 @@ public class MainController {
             }
         });
     }
-    
+
     @FXML
     private void handleDeleteTask() {
         Task selectedTask = taskTableView.getSelectionModel().getSelectedItem();
         Project selectedProject = projectListView.getSelectionModel().getSelectedItem();
-        
+
         if (selectedTask == null) {
             showAlert(Alert.AlertType.WARNING, "Selezione", "Seleziona un task da eliminare.");
             return;
         }
-        
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Sei sicuro di voler eliminare il task '" + selectedTask.getTitle() + "'?");
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
+                "Sei sicuro di voler eliminare il task '" + selectedTask.getTitle() + "'?");
         confirm.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 ServiceLocator.getInstance().getTaskService().deleteTask(selectedTask);
-                // Refresh project data from DB to ensure tasks list is updated
+                // Refresh: ricarica i task del progetto corrente
                 if (selectedProject != null) {
-                    Project refreshedProject = ServiceLocator.getInstance().getProjectService().getProjectById(selectedProject.getId());
-                    // Update the item in the list view (optional, but good for consistency)
-                    int index = projectListView.getItems().indexOf(selectedProject);
-                    if (index >= 0) {
-                        projectListView.getItems().set(index, refreshedProject);
-                        projectListView.getSelectionModel().select(index);
-                    }
-                    loadTasks(refreshedProject);
+                    // Ricarica i task dal DB per essere sicuri
+                    loadTasks(selectedProject);
                 }
             }
         });
@@ -287,7 +316,8 @@ public class MainController {
     @FXML
     private void handleLoadPlanning() {
         LocalDate date = planningDatePicker.getValue();
-        if (date == null) return;
+        if (date == null)
+            return;
 
         List<Task> tasks = ServiceLocator.getInstance().getPlanningService().getTasksForDay(date);
         double total = ServiceLocator.getInstance().getPlanningService().getTotalEffortForDay(date);
@@ -299,19 +329,20 @@ public class MainController {
 
     @FXML
     private void handleProjectReport() {
-        // Legacy method, kept for compatibility if needed or removed if FXML updated completely
+        // Legacy method, kept for compatibility if needed or removed if FXML updated
+        // completely
         // In new UI, we use handleGenerateReport
         handleGenerateReport();
     }
-    
+
     @FXML
     private void handleGenerateReport() {
         Project selected = reportProjectCombo.getSelectionModel().getSelectedItem();
         if (selected == null) {
-             // Try getting from list view if that was the context, OR warn
-             selected = projectListView.getSelectionModel().getSelectedItem();
+            // Try getting from list view if that was the context, OR warn
+            selected = projectListView.getSelectionModel().getSelectedItem();
         }
-        
+
         if (selected == null) {
             reportTextArea.setText("Seleziona un progetto per generare il report.");
             return;
@@ -322,7 +353,10 @@ public class MainController {
         reportTextArea.setText(report);
     }
 
-    @FXML private void handleExit() { System.exit(0); }
+    @FXML
+    private void handleExit() {
+        System.exit(0);
+    }
 
     private void showAlert(Alert.AlertType type, String title, String msg) {
         Alert alert = new Alert(type);
