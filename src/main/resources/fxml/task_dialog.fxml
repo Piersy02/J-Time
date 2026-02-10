@@ -13,14 +13,17 @@
             <Label text="Titolo:"/>
             <TextField fx:id="titleField" GridPane.columnIndex="1"/>
 
-            <Label text="Stima (ore):" GridPane.rowIndex="1"/>
-            <TextField fx:id="estimatedField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+            <Label text="Descrizione:" GridPane.rowIndex="1"/>
+            <TextArea fx:id="descriptionArea" GridPane.columnIndex="1" GridPane.rowIndex="1" prefRowCount="3"/>
 
-            <Label text="Priorità:" GridPane.rowIndex="2"/>
-            <ComboBox fx:id="priorityCombo" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+            <Label text="Stima (ore):" GridPane.rowIndex="2"/>
+            <TextField fx:id="estimatedField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
-            <Label text="Data:" GridPane.rowIndex="3"/>
-            <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+            <Label text="Priorità:" GridPane.rowIndex="3"/>
+            <ComboBox fx:id="priorityCombo" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+            <Label text="Data:" GridPane.rowIndex="4"/>
+            <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
         </GridPane>
     </content>
 </DialogPane>

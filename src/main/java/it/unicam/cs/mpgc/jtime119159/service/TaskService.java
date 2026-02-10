@@ -17,7 +17,13 @@ public class TaskService {
     }
 
     public void deleteTask(Task task) {
-        taskRepository.delete(task);
+        Project project = task.getProject();
+        if (project != null) {
+            project.getTasks().remove(task);
+            projectRepository.update(project);
+        } else {
+            taskRepository.delete(task);
+        }
     }
 
     /**

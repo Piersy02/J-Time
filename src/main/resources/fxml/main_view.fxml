@@ -3,71 +3,109 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 
 <BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
             fx:controller="it.unicam.cs.mpgc.jtime119159.view.MainController"
-            prefHeight="650.0" prefWidth="900.0">
-    <top>
-        <MenuBar>
-            <Menu text="File"><MenuItem text="Esci" onAction="#handleExit"/></Menu>
-        </MenuBar>
-    </top>
+            prefHeight="700.0" prefWidth="1000.0"
+            stylesheets="@../css/style.css">
+
+    <!-- SIDEBAR -->
+    <left>
+        <VBox styleClass="sidebar" spacing="10" prefWidth="250">
+            <Label text="J-Time" styleClass="sidebar-title"/>
+            
+            <Button text="Progetti" onAction="#showProjectsView" styleClass="sidebar-button" maxWidth="Infinity"/>
+            <!-- Task Universali rimosso -->
+            <Button text="Pianificazione" onAction="#showPlanningView" styleClass="sidebar-button" maxWidth="Infinity"/>
+            <Button text="Report &amp; Statistiche" onAction="#showReportsView" styleClass="sidebar-button" maxWidth="Infinity"/>
+            
+            <Region VBox.vgrow="ALWAYS"/>
+            
+            <Button text="Esci" onAction="#handleExit" styleClass="sidebar-button" maxWidth="Infinity"/>
+        </VBox>
+    </left>
+
+    <!-- CONTENT AREA -->
     <center>
-        <TabPane tabClosingPolicy="UNAVAILABLE">
-            <!-- SCHEDA GESTIONE PROGETTI -->
-            <Tab text="Progetti e Task">
-                <SplitPane dividerPositions="0.3">
+        <StackPane fx:id="contentArea" style="-fx-padding: 20; -fx-background-color: #f4f4f9;">
+            
+            <!-- VIEW 1: PROGETTI -->
+            <VBox fx:id="projectsView" spacing="15" styleClass="content-area">
+                <Label text="Gestione Progetti" styleClass="header-label"/>
+                <SplitPane dividerPositions="0.3" VBox.vgrow="ALWAYS">
                     <VBox spacing="10" style="-fx-padding: 10;">
                         <Label text="Lista Progetti" style="-fx-font-weight: bold;"/>
                         <ListView fx:id="projectListView" VBox.vgrow="ALWAYS"/>
                         <HBox spacing="5">
-                            <Button text="Nuovo" onAction="#handleNewProject" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-                            <Button text="Chiudi" onAction="#handleCloseProject" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                            <Button text="Nuovo" onAction="#handleNewProject" styleClass="action-button" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                            <Button text="Chiudi" onAction="#handleCloseProject" styleClass="secondary-button" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
                         </HBox>
                         <HBox spacing="5">
-                            <Button text="Riapri" onAction="#handleReopenProject" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-                            <Button text="Elimina" onAction="#handleDeleteProject" maxWidth="Infinity" HBox.hgrow="ALWAYS" style="-fx-base: #ff6666;"/>
+                            <Button text="Riapri" onAction="#handleReopenProject" styleClass="secondary-button" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                            <Button text="Elimina" onAction="#handleDeleteProject" styleClass="delete-button" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
                         </HBox>
                     </VBox>
+                    
                     <VBox spacing="10" style="-fx-padding: 10;">
                         <Label text="Attività del Progetto" style="-fx-font-weight: bold;"/>
                         <TableView fx:id="taskTableView" VBox.vgrow="ALWAYS">
                             <columns>
-                                <TableColumn fx:id="colTitle" text="Titolo" prefWidth="150"/>
-                                <TableColumn fx:id="colPriority" text="Priorità" prefWidth="80"/>
-                                <TableColumn fx:id="colStatus" text="Stato" prefWidth="100"/>
-                                <TableColumn fx:id="colEstimated" text="Stima (h)" prefWidth="70"/>
-                                <TableColumn fx:id="colActual" text="Effettivo (h)" prefWidth="80"/>
+                                <TableColumn fx:id="colTitle" text="Titolo" prefWidth="200"/>
+                                <TableColumn fx:id="colPriority" text="Priorità" prefWidth="100"/>
+                                <TableColumn fx:id="colStatus" text="Stato" prefWidth="120"/>
+                                <TableColumn fx:id="colEstimated" text="Stima (h)" prefWidth="80"/>
+                                <TableColumn fx:id="colActual" text="Effettivo (h)" prefWidth="90"/>
                             </columns>
                         </TableView>
-                        <HBox spacing="10">
-                            <Button text="Aggiungi Task" onAction="#handleNewTask"/>
-                            <Button text="Completa Task" onAction="#handleCompleteTask" style="-fx-base: #99ff99;"/>
-                            <Button text="Genera Report Progetto" onAction="#handleProjectReport"/>
+                        <HBox spacing="10" alignment="CENTER_RIGHT">
+                            <Button text="Aggiungi Task" onAction="#handleNewTask" styleClass="action-button"/>
+                            <Button text="Completa Task" onAction="#handleCompleteTask" styleClass="action-button" style="-fx-background-color: #2ecc71;"/>
+                            <Button text="Elimina Task" onAction="#handleDeleteTask" styleClass="delete-button"/>
                         </HBox>
                     </VBox>
                 </SplitPane>
-            </Tab>
+            </VBox>
 
-            <!-- SCHEDA PIANIFICAZIONE -->
-            <Tab text="Pianificazione e Carico">
-                <VBox spacing="15" style="-fx-padding: 20;">
-                    <HBox spacing="10" alignment="CENTER_LEFT">
-                        <Label text="Seleziona Giorno:"/>
+            <!-- Task Universali rimosso -->
+
+            <!-- VIEW 3: PIANIFICAZIONE -->
+            <VBox fx:id="planningView" spacing="15" visible="false" styleClass="content-area">
+                <Label text="Pianificazione Giornaliera" styleClass="header-label"/>
+                <HBox spacing="20" alignment="CENTER_LEFT" styleClass="card">
+                     <VBox spacing="5">
+                        <Label text="Seleziona Data" styleClass="card-title"/>
                         <DatePicker fx:id="planningDatePicker" onAction="#handleLoadPlanning"/>
-                    </HBox>
-                    <Separator/>
-                    <Label fx:id="effortLabel" text="Impegno totale: 0.0 ore" style="-fx-font-size: 16;"/>
-                    <TableView fx:id="planningTableView" VBox.vgrow="ALWAYS">
-                        <columns>
-                            <TableColumn fx:id="colPlanTitle" text="Titolo"/>
-                            <TableColumn fx:id="colPlanProject" text="Progetto"/>
-                            <TableColumn fx:id="colPlanTime" text="Tempo Stimato"/>
-                        </columns>
-                    </TableView>
-                </VBox>
-            </Tab>
-        </TabPane>
+                     </VBox>
+                     <Separator orientation="VERTICAL"/>
+                     <VBox spacing="5">
+                        <Label text="Carico Totale" styleClass="card-title"/>
+                        <Label fx:id="effortLabel" text="0.0h" styleClass="card-value"/>
+                     </VBox>
+                </HBox>
+
+                <TableView fx:id="planningTableView" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colPlanTitle" text="Titolo Task" prefWidth="300"/>
+                        <TableColumn fx:id="colPlanProject" text="Progetto" prefWidth="200"/>
+                        <TableColumn fx:id="colPlanTime" text="Tempo Stimato (h)" prefWidth="150"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- VIEW 4: REPORT -->
+            <VBox fx:id="reportsView" spacing="15" visible="false" styleClass="content-area">
+                <Label text="Report e Statistiche" styleClass="header-label"/>
+                <HBox spacing="15" alignment="CENTER_LEFT">
+                    <Label text="Progetto:"/>
+                    <ComboBox fx:id="reportProjectCombo" prefWidth="250" promptText="Seleziona un progetto..."/>
+                    <Button text="Genera Report" onAction="#handleGenerateReport" styleClass="action-button"/>
+                </HBox>
+                
+                <TextArea fx:id="reportTextArea" VBox.vgrow="ALWAYS" editable="false" style="-fx-font-family: 'Consolas', monospace;"/>
+            </VBox>
+
+        </StackPane>
     </center>
 </BorderPane>

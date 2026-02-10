@@ -45,4 +45,8 @@ public class ProjectService {
         project.setStatus(ProjectStatus.ACTIVE);
         projectRepository.update(project);
     }
+
+    public Project getProjectById(Long id) {
+        return projectRepository.findById(id).orElseThrow(() -> new BusinessException("Progetto non trovato"));
+    }
 }

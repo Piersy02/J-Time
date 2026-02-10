@@ -9,6 +9,7 @@ import java.time.LocalDate;
 
 public class TaskDialogController {
     @FXML private TextField titleField, estimatedField;
+    @FXML private TextArea descriptionArea;
     @FXML private ComboBox<Priority> priorityCombo;
     @FXML private DatePicker datePicker;
 
@@ -23,6 +24,7 @@ public class TaskDialogController {
         try {
             return Task.builder()
                     .title(titleField.getText())
+                    .description(descriptionArea.getText())
                     .estimatedTime(Double.parseDouble(estimatedField.getText()))
                     .priority(priorityCombo.getValue())
                     .plannedDate(datePicker.getValue())

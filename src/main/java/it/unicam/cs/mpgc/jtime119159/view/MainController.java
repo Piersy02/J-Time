@@ -13,6 +13,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -21,21 +23,36 @@ import java.util.Optional;
 
 public class MainController {
 
-    // --- Componenti UI: Tab Progetti ---
+    // --- Componenti UI: Layout Generale ---
+    @FXML private StackPane contentArea;
+    @FXML private VBox projectsView;
+    // Task Universali rimosso
+    @FXML private VBox planningView;
+    @FXML private VBox reportsView;
+
+    // --- View 1: Progetti ---
     @FXML private ListView<Project> projectListView;
     @FXML private TableView<Task> taskTableView;
     @FXML private TableColumn<Task, String> colTitle, colPriority, colStatus;
     @FXML private TableColumn<Task, Double> colEstimated, colActual;
 
-    // --- Componenti UI: Tab Pianificazione ---
+    // Task Universali rimosso
+
+    // --- View 3: Pianificazione ---
     @FXML private DatePicker planningDatePicker;
     @FXML private Label effortLabel;
     @FXML private TableView<Task> planningTableView;
     @FXML private TableColumn<Task, String> colPlanTitle, colPlanProject;
     @FXML private TableColumn<Task, Double> colPlanTime;
 
+    // --- View 4: Report ---
+    @FXML private ComboBox<Project> reportProjectCombo;
+    @FXML private TextArea reportTextArea;
+
+    // Dati
     private final ObservableList<Project> projectData = FXCollections.observableArrayList();
     private final ObservableList<Task> taskData = FXCollections.observableArrayList();
+    // Task Universali rimosso
 
     @FXML
     public void initialize() {
@@ -55,6 +72,25 @@ public class MainController {
                 setText(empty ? null : item.getName() + " (" + item.getStatus().getDisplayName() + ")");
             }
         });
+        
+        // Formattazione Combo Box Report
+        reportProjectCombo.setCellFactory(lv -> new ListCell<>() {
+             @Override
+            protected void updateItem(Project item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty ? null : item.getName());
+            }
+        });
+        reportProjectCombo.setButtonCell(new ListCell<>() {
+             @Override
+            protected void updateItem(Project item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty ? null : item.getName());
+            }
+        });
+
+        // Default view
+        showProjectsView();
     }
 
     private void setupTableColumns() {
@@ -65,13 +101,37 @@ public class MainController {
         colEstimated.setCellValueFactory(new PropertyValueFactory<>("estimatedTime"));
         colActual.setCellValueFactory(new PropertyValueFactory<>("actualTime"));
 
+        // Task Universali rimosso
+
         // Tabella Pianificazione
         colPlanTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         colPlanProject.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getProject().getName()));
         colPlanTime.setCellValueFactory(new PropertyValueFactory<>("estimatedTime"));
     }
 
-    // --- Gestione Progetti ---
+    // --- Navigazione ---
+
+    @FXML public void showProjectsView() { switchView(projectsView); }
+    
+    // Task Universali rimosso
+    
+    @FXML public void showPlanningView() { switchView(planningView); }
+    
+    @FXML public void showReportsView() { 
+        switchView(reportsView);
+        reportProjectCombo.setItems(projectData);
+    }
+
+    private void switchView(VBox view) {
+        projectsView.setVisible(false);
+        planningView.setVisible(false);
+        reportsView.setVisible(false);
+        
+        view.setVisible(true);
+        view.toFront();
+    }
+
+    // --- Caricamento Dati ---
 
     private void loadProjects() {
         projectData.setAll(ServiceLocator.getInstance().getProjectService().getAllProjects());
@@ -82,6 +142,10 @@ public class MainController {
         taskData.setAll(project.getTasks());
         taskTableView.setItems(taskData);
     }
+    
+    // Task Universali rimosso
+
+    // --- Azioni Utente ---
 
     @FXML
     private void handleNewProject() {
@@ -121,7 +185,7 @@ public class MainController {
             if (response == ButtonType.OK) {
                 ServiceLocator.getInstance().getProjectService().deleteProject(selected);
                 loadProjects();
-                taskData.clear(); // Pulisce la tabella task
+                taskData.clear();
             }
         });
     }
@@ -135,8 +199,6 @@ public class MainController {
         loadProjects();
     }
 
-    // --- Gestione Task ---
-
     @FXML
     private void handleNewTask() {
         Project selected = projectListView.getSelectionModel().getSelectedItem();
@@ -146,39 +208,29 @@ public class MainController {
         }
 
         try {
-            // 1. Carichiamo l'FXML (che ora ha DialogPane come root)
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/task_dialog.fxml"));
             DialogPane dialogPane = loader.load();
-
-            // 2. Otteniamo il controller associato all'FXML
             TaskDialogController controller = loader.getController();
 
-            // 3. Creiamo il Dialog di JavaFX
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
             dialog.setTitle("Aggiungi Nuova Attività");
-
-            // Aggiungiamo i bottoni standard OK e ANNULLA
             dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-            // 4. Mostriamo il dialogo e attendiamo la risposta
             Optional<ButtonType> result = dialog.showAndWait();
 
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                Task newTask = controller.getTask(); // Recupera i dati dal controller del dialogo
+                Task newTask = controller.getTask();
                 if (newTask != null) {
-                    // Salviamo tramite il service
                     ServiceLocator.getInstance().getTaskService().addTask(selected, newTask);
-
-                    // Aggiorniamo la tabella
                     loadTasks(selected);
                 } else {
-                    showAlert(Alert.AlertType.ERROR, "Errore", "Dati non validi. Assicurati che il tempo sia un numero.");
+                    showAlert(Alert.AlertType.ERROR, "Errore", "Dati non validi.");
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Errore Critico", "Impossibile caricare la finestra di dialogo.");
+            showAlert(Alert.AlertType.ERROR, "Errore Critico", "Impossibile caricare dialog.");
         }
     }
 
@@ -202,8 +254,35 @@ public class MainController {
             }
         });
     }
-
-    // --- Pianificazione e Report ---
+    
+    @FXML
+    private void handleDeleteTask() {
+        Task selectedTask = taskTableView.getSelectionModel().getSelectedItem();
+        Project selectedProject = projectListView.getSelectionModel().getSelectedItem();
+        
+        if (selectedTask == null) {
+            showAlert(Alert.AlertType.WARNING, "Selezione", "Seleziona un task da eliminare.");
+            return;
+        }
+        
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Sei sicuro di voler eliminare il task '" + selectedTask.getTitle() + "'?");
+        confirm.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                ServiceLocator.getInstance().getTaskService().deleteTask(selectedTask);
+                // Refresh project data from DB to ensure tasks list is updated
+                if (selectedProject != null) {
+                    Project refreshedProject = ServiceLocator.getInstance().getProjectService().getProjectById(selectedProject.getId());
+                    // Update the item in the list view (optional, but good for consistency)
+                    int index = projectListView.getItems().indexOf(selectedProject);
+                    if (index >= 0) {
+                        projectListView.getItems().set(index, refreshedProject);
+                        projectListView.getSelectionModel().select(index);
+                    }
+                    loadTasks(refreshedProject);
+                }
+            }
+        });
+    }
 
     @FXML
     private void handleLoadPlanning() {
@@ -213,30 +292,34 @@ public class MainController {
         List<Task> tasks = ServiceLocator.getInstance().getPlanningService().getTasksForDay(date);
         double total = ServiceLocator.getInstance().getPlanningService().getTotalEffortForDay(date);
 
-        effortLabel.setText("Impegno totale per il giorno: " + total + " ore");
-        // Segnalazione visiva se si superano le 8 ore (carico eccessivo)
-        effortLabel.setStyle(total > 8.0 ? "-fx-text-fill: red; -fx-font-weight: bold;" : "-fx-text-fill: black;");
-
+        effortLabel.setText(total + " ore");
+        effortLabel.setStyle(total > 8.0 ? "-fx-text-fill: red; -fx-font-weight: bold;" : "-fx-text-fill: #2c3e50;");
         planningTableView.setItems(FXCollections.observableArrayList(tasks));
     }
 
     @FXML
     private void handleProjectReport() {
-        Project selected = projectListView.getSelectionModel().getSelectedItem();
-        if (selected == null) return;
+        // Legacy method, kept for compatibility if needed or removed if FXML updated completely
+        // In new UI, we use handleGenerateReport
+        handleGenerateReport();
+    }
+    
+    @FXML
+    private void handleGenerateReport() {
+        Project selected = reportProjectCombo.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+             // Try getting from list view if that was the context, OR warn
+             selected = projectListView.getSelectionModel().getSelectedItem();
+        }
+        
+        if (selected == null) {
+            reportTextArea.setText("Seleziona un progetto per generare il report.");
+            return;
+        }
 
         ReportStrategy strategy = new ProjectSummaryReport();
         String report = strategy.generateReport(selected.getTasks());
-
-        TextArea textArea = new TextArea(report);
-        textArea.setEditable(false);
-        textArea.setWrapText(true);
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Report Progetto");
-        alert.setHeaderText("Riepilogo attività per: " + selected.getName());
-        alert.getDialogPane().setContent(textArea);
-        alert.showAndWait();
+        reportTextArea.setText(report);
     }
 
     @FXML private void handleExit() { System.exit(0); }

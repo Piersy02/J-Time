@@ -23,7 +23,7 @@ public class Project {
     @Builder.Default
     private ProjectStatus status = ProjectStatus.ACTIVE; // Default all'apertura
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @Builder.Default // Inizializza la lista anche con il builder
     private List<Task> tasks = new ArrayList<>();
 
