@@ -1,5 +1,7 @@
 package it.unicam.cs.mpgc.jtime119159.service;
 
+import it.unicam.cs.mpgc.jtime119159.enums.ProjectStatus;
+import it.unicam.cs.mpgc.jtime119159.enums.TaskStatus;
 import it.unicam.cs.mpgc.jtime119159.model.Project;
 import it.unicam.cs.mpgc.jtime119159.model.Task;
 import it.unicam.cs.mpgc.jtime119159.repository.Repository;
@@ -26,14 +28,15 @@ public class ProjectService {
      * Regola di Business: Un progetto può essere chiuso solo se non ci sono attività pendenti.
      */
     public void closeProject(Project project) {
-        boolean hasPendingTasks = project.getTasks().stream()
-                .anyMatch(task -> !task.isCompleted());
+        // Controllo se ci sono task che NON sono in stato COMPLETED
+        boolean hasUnfinishedTasks = project.getTasks().stream()
+                .anyMatch(task -> task.getStatus() != TaskStatus.COMPLETED);
 
-        if (hasPendingTasks) {
-            throw new BusinessException("Impossibile chiudere: ci sono ancora attività non completate.");
+        if (hasUnfinishedTasks) {
+            throw new BusinessException("Impossibile completare il progetto: ci sono attività non terminate.");
         }
 
-        project.setClosed(true);
+        project.setStatus(ProjectStatus.COMPLETED);
         projectRepository.update(project);
     }
 

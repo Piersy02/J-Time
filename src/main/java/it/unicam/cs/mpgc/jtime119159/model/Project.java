@@ -1,5 +1,6 @@
 package it.unicam.cs.mpgc.jtime119159.model;
 
+import it.unicam.cs.mpgc.jtime119159.enums.ProjectStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.ArrayList;
@@ -17,7 +18,10 @@ public class Project {
     private Long id;
 
     private String name;
-    private boolean closed;
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private ProjectStatus status = ProjectStatus.ACTIVE; // Default all'apertura
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Builder.Default // Inizializza la lista anche con il builder

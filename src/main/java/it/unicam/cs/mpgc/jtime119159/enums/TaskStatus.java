@@ -1,6 +1,16 @@
 package it.unicam.cs.mpgc.jtime119159.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum TaskStatus {
-    PENDING,
-    COMPLETED
+    TO_DO("Da fare"),
+    IN_PROGRESS("In corso"),
+    COMPLETED("Completato");
+
+    private final String displayName;
+
+    TaskStatus(String displayName) {
+        this.displayName = displayName;
+    }
 }
