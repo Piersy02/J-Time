@@ -10,7 +10,7 @@ public class JTimeApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(JTimeApplication.class.getResource("/fxml/main_view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+        Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
         stage.setTitle("JTime - Gestione Attività");
         stage.setScene(scene);
         stage.show();
