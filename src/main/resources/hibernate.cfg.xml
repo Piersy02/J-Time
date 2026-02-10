@@ -24,5 +24,6 @@
         <!-- Elenco delle classi annotate -->
         <mapping class="it.unicam.cs.mpgc.jtime119159.model.Project"/>
         <mapping class="it.unicam.cs.mpgc.jtime119159.model.Task"/>
+        <mapping class="it.unicam.cs.mpgc.jtime119159.model.Tag"/>
     </session-factory>
 </hibernate-configuration>

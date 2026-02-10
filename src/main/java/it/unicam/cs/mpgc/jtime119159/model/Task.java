@@ -5,6 +5,8 @@ import it.unicam.cs.mpgc.jtime119159.enums.TaskStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
+import java.util.Set;
+import java.util.HashSet;
 
 @Entity
 @Table(name = "tasks")
@@ -34,4 +36,13 @@ public class Task {
     @JoinColumn(name = "project_id")
     @ToString.Exclude // Evita loop infiniti nel toString di Lombok
     private Project project;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "task_tags",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    @Builder.Default
+    private Set<Tag> tags = new HashSet<>();
 }

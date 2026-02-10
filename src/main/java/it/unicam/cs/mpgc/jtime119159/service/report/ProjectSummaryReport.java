@@ -8,11 +8,11 @@ public class ProjectSummaryReport implements ReportStrategy {
 
     @Override
     public String generateReport(List<Task> tasks) {
-        StringBuilder sb = new StringBuilder("--- Riepilogo Attività ---\n");
+        StringBuilder sb = new StringBuilder("REPORT PROGETTO\n");
         for (Task t : tasks) {
-            String status = t.isCompleted() ? "[FATTO]" : "[PENDENTE]";
-            sb.append(String.format("%s %s: Stimato %.1fh, Effettivo %.1fh\n",
-                    status, t.getTitle(), t.getEstimatedTime(), t.getActualTime()));
+            double variance = t.getActualTime() - t.getEstimatedTime();
+            sb.append(String.format("- %s: Stimato %.1fh, Effettivo %.1fh (Diff: %.1fh)\n",
+                    t.getTitle(), t.getEstimatedTime(), t.getActualTime(), variance));
         }
         return sb.toString();
     }
