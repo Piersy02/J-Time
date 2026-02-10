@@ -4,6 +4,12 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
 group = 'it.unicam.cs.mpgc'
 version = '1.0-SNAPSHOT'
 
