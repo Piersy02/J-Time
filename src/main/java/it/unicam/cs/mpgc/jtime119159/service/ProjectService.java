@@ -36,4 +36,13 @@ public class ProjectService {
         project.setStatus(ProjectStatus.COMPLETED);
         projectRepository.update(project);
     }
+
+    public void deleteProject(Project project) {
+        projectRepository.delete(project);
+    }
+
+    public void reopenProject(Project project) {
+        project.setStatus(ProjectStatus.ACTIVE);
+        projectRepository.update(project);
+    }
 }
