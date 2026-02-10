@@ -26,4 +26,11 @@ public class PlanningService {
                 .mapToDouble(Task::getEstimatedTime)
                 .sum();
     }
+
+    /**
+     * Verifica se il carico di lavoro supera una soglia (es. 8 ore).
+     */
+    public boolean isOverloaded(LocalDate date, double limit) {
+        return getTotalEffortForDay(date) > limit;
+    }
 }
