@@ -4,6 +4,7 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
+//forza l'utilizzo di java 21
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
