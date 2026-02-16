@@ -65,9 +65,7 @@
                 </SplitPane>
             </VBox>
 
-            <!-- Task Universali rimosso -->
-
-            <!-- VIEW 3: PIANIFICAZIONE -->
+            <!-- VIEW 2: PIANIFICAZIONE -->
             <VBox fx:id="planningView" spacing="15" visible="false" styleClass="content-area">
                 <Label text="Pianificazione Giornaliera" styleClass="header-label"/>
                 <HBox spacing="20" alignment="CENTER_LEFT" styleClass="card">
@@ -91,7 +89,7 @@
                 </TableView>
             </VBox>
 
-            <!-- VIEW 4: REPORT -->
+            <!-- VIEW 3: REPORT -->
             <VBox fx:id="reportsView" spacing="15" visible="false" styleClass="content-area">
                 <Label text="Report e Statistiche" styleClass="header-label"/>
                 <HBox spacing="15" alignment="CENTER_LEFT">

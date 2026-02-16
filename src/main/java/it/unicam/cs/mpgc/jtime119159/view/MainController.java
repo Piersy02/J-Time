@@ -133,8 +133,6 @@ public class MainController {
         switchView(projectsView);
     }
 
-    // Task Universali rimosso
-
     @FXML
     public void showPlanningView() {
         switchView(planningView);
@@ -171,8 +169,6 @@ public class MainController {
         taskData.setAll(freshProject.getTasks());
         taskTableView.setItems(taskData);
     }
-
-    // Task Universali rimosso
 
     // --- Azioni Utente ---
 
@@ -325,14 +321,6 @@ public class MainController {
         effortLabel.setText(total + " ore");
         effortLabel.setStyle(total > 8.0 ? "-fx-text-fill: red; -fx-font-weight: bold;" : "-fx-text-fill: #2c3e50;");
         planningTableView.setItems(FXCollections.observableArrayList(tasks));
-    }
-
-    @FXML
-    private void handleProjectReport() {
-        // Legacy method, kept for compatibility if needed or removed if FXML updated
-        // completely
-        // In new UI, we use handleGenerateReport
-        handleGenerateReport();
     }
 
     @FXML
