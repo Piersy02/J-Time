@@ -4,12 +4,20 @@ import it.unicam.cs.mpgc.jtime119159.repository.ProjectRepository;
 import it.unicam.cs.mpgc.jtime119159.repository.TaskRepository;
 import lombok.Getter;
 
+/**
+ * Singleton per l'accesso ai servizi dell'applicazione.
+ * Gestisce l'inizializzazione e la fornitura delle istanze dei service.
+ */
 public class ServiceLocator {
-    @Getter private static final ServiceLocator instance = new ServiceLocator();
+    @Getter
+    private static final ServiceLocator instance = new ServiceLocator();
 
-    @Getter private final ProjectService projectService;
-    @Getter private final TaskService taskService;
-    @Getter private final PlanningService planningService;
+    @Getter
+    private final ProjectService projectService;
+    @Getter
+    private final TaskService taskService;
+    @Getter
+    private final PlanningService planningService;
 
     private ServiceLocator() {
         // Inizializzazione Repository

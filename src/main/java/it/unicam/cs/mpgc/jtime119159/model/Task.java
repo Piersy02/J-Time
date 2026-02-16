@@ -8,6 +8,10 @@ import java.time.LocalDate;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * Entità che rappresenta un'attività (Task) all'interno di un progetto.
+ * Contiene informazioni come titolo, descrizione, stime di tempo e stato.
+ */
 @Entity
 @Table(name = "tasks")
 @Data

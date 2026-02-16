@@ -2,6 +2,9 @@ package it.unicam.cs.mpgc.jtime119159.enums;
 
 import lombok.Getter;
 
+/**
+ * Enum che definisce lo stato di avanzamento di un'attività.
+ */
 @Getter
 public enum TaskStatus {
     TO_DO("Da fare"),

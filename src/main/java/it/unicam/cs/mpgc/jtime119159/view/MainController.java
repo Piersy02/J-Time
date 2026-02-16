@@ -21,6 +21,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Controller principale dell'applicazione.
+ * Gestisce la visualizzazione dei progetti, delle attività, della
+ * pianificazione e dei report.
+ * Coordina le interazioni dell'utente con la logica di business.
+ */
 public class MainController {
 
     // --- Componenti UI: Layout Generale ---

@@ -7,11 +7,19 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import java.time.LocalDate;
 
+/**
+ * Controller per la finestra di dialogo di creazione di un nuovo task.
+ * Recupera i dati inseriti dall'utente e costruisce l'oggetto Task.
+ */
 public class TaskDialogController {
-    @FXML private TextField titleField, estimatedField;
-    @FXML private TextArea descriptionArea;
-    @FXML private ComboBox<Priority> priorityCombo;
-    @FXML private DatePicker datePicker;
+    @FXML
+    private TextField titleField, estimatedField;
+    @FXML
+    private TextArea descriptionArea;
+    @FXML
+    private ComboBox<Priority> priorityCombo;
+    @FXML
+    private DatePicker datePicker;
 
     @FXML
     public void initialize() {

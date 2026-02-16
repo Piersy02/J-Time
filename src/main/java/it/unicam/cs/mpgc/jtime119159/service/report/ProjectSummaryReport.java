@@ -4,6 +4,11 @@ import it.unicam.cs.mpgc.jtime119159.model.Task;
 
 import java.util.List;
 
+/**
+ * Implementazione della strategia di reportistica che genera un riepilogo
+ * testuale del progetto.
+ * Calcola e mostra la varianza tra tempo stimato ed effettivo per ogni task.
+ */
 public class ProjectSummaryReport implements ReportStrategy {
 
     @Override

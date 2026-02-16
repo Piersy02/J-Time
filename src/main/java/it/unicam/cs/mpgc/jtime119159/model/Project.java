@@ -6,6 +6,10 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entità che rappresenta un progetto nel sistema.
+ * Un progetto contiene una lista di attività (Task) e ha uno stato.
+ */
 @Entity
 @Table(name = "projects")
 @Data
@@ -30,7 +34,12 @@ public class Project {
     @ToString.Exclude
     private List<Task> tasks = new ArrayList<>();
 
-    // Metodo di utilità per aggiungere task
+    /**
+     * Metodo di utilità per aggiungere un task al progetto.
+     * Imposta automaticamente il riferimento del progetto nel task.
+     *
+     * @param task il task da aggiungere
+     */
     public void addTask(Task task) {
         tasks.add(task);
         task.setProject(this);

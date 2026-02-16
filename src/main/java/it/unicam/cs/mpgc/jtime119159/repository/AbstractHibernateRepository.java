@@ -6,10 +6,23 @@ import org.hibernate.Transaction;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementazione astratta del pattern Repository utilizzando Hibernate.
+ * Fornisce l'implementazione base per le operazioni CRUD.
+ *
+ * @param <T>  il tipo dell'entità
+ * @param <ID> il tipo dell'identificativo
+ */
 public abstract class AbstractHibernateRepository<T, ID> implements Repository<T, ID> {
 
     private final Class<T> entityClass;
 
+    /**
+     * Costruttore che richiede la classe dell'entità per le operazioni di
+     * Hibernate.
+     *
+     * @param entityClass la classe dell'entità
+     */
     protected AbstractHibernateRepository(Class<T> entityClass) {
         this.entityClass = entityClass;
     }
@@ -51,7 +64,8 @@ public abstract class AbstractHibernateRepository<T, ID> implements Repository<T
             action.accept(session);
             transaction.commit();
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
+            if (transaction != null)
+                transaction.rollback();
             throw new RuntimeException("Errore durante la transazione DB", e);
         }
     }

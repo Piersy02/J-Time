@@ -6,6 +6,10 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 
+/**
+ * Classe principale dell'applicazione JTime.
+ * Avvia l'interfaccia JavaFX.
+ */
 public class JTimeApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
