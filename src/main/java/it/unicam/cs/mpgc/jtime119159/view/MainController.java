@@ -40,7 +40,7 @@ public class MainController {
     @FXML
     private TableView<Task> taskTableView;
     @FXML
-    private TableColumn<Task, String> colTitle, colPriority, colStatus;
+    private TableColumn<Task, String> colTitle, colDescription, colPriority, colStatus;
     @FXML
     private TableColumn<Task, Double> colEstimated, colActual;
 
@@ -112,6 +112,7 @@ public class MainController {
     private void setupTableColumns() {
         // Tabella Task Progetto
         colTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        colDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         colPriority
                 .setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getPriority().getDisplayName()));
         colStatus.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getStatus().getDisplayName()));
