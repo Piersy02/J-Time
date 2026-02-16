@@ -26,15 +26,19 @@ public class ProjectService {
      * Vincolo: Chiude il progetto solo se non ci sono attività pendenti.
      */
     public void closeProject(Project project) {
-        boolean hasPending = project.getTasks().stream()
+        // Ricarica lo stato corrente del progetto dal DB per verificare i task
+        // aggiornati
+        Project freshProject = getProjectById(project.getId());
+
+        boolean hasPending = freshProject.getTasks().stream()
                 .anyMatch(t -> t.getStatus() != TaskStatus.COMPLETED);
 
         if (hasPending) {
             throw new BusinessException("Impossibile chiudere il progetto: sono presenti attività non completate.");
         }
 
-        project.setStatus(ProjectStatus.COMPLETED);
-        projectRepository.update(project);
+        freshProject.setStatus(ProjectStatus.COMPLETED);
+        projectRepository.update(freshProject);
     }
 
     public void deleteProject(Project project) {

@@ -14,9 +14,11 @@ import java.util.HashSet;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     private String title;
@@ -35,7 +37,6 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "project_id")
     @ToString.Exclude // Evita loop infiniti nel toString di Lombok
-    @EqualsAndHashCode.Exclude
     private Project project;
 
     @ManyToMany(fetch = FetchType.EAGER)
