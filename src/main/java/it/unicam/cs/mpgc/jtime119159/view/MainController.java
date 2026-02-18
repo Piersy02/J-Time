@@ -50,8 +50,6 @@ public class MainController {
     @FXML
     private TableColumn<Task, Double> colEstimated, colActual;
 
-    // Task Universali rimosso
-
     // --- View 3: Pianificazione ---
     @FXML
     private DatePicker planningDatePicker;
@@ -73,7 +71,6 @@ public class MainController {
     // Dati
     private final ObservableList<Project> projectData = FXCollections.observableArrayList();
     private final ObservableList<Task> taskData = FXCollections.observableArrayList();
-    // Task Universali rimosso
 
     @FXML
     public void initialize() {
@@ -124,8 +121,6 @@ public class MainController {
         colStatus.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getStatus().getDisplayName()));
         colEstimated.setCellValueFactory(new PropertyValueFactory<>("estimatedTime"));
         colActual.setCellValueFactory(new PropertyValueFactory<>("actualTime"));
-
-        // Task Universali rimosso
 
         // Tabella Pianificazione
         colPlanTitle.setCellValueFactory(new PropertyValueFactory<>("title"));

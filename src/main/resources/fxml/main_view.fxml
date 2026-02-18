@@ -14,7 +14,6 @@
             <Label text="J-Time" styleClass="sidebar-title"/>
             
             <Button text="Progetti" onAction="#showProjectsView" styleClass="sidebar-button" maxWidth="Infinity"/>
-            <!-- Task Universali rimosso -->
             <Button text="Pianificazione" onAction="#showPlanningView" styleClass="sidebar-button" maxWidth="Infinity"/>
             <Button text="Report &amp; Statistiche" onAction="#showReportsView" styleClass="sidebar-button" maxWidth="Infinity"/>
             
