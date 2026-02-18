@@ -309,6 +309,9 @@ public class MainController {
                 ServiceLocator.getInstance().getTaskService().deleteTask(selectedTask);
                 // Refresh: ricarica i task del progetto corrente
                 if (selectedProject != null) {
+                    // Start Fix: Ricarica anche i progetti per evitare riferimenti stale
+                    loadProjects();
+                    // End Fix
                     // Ricarica i task dal DB per essere sicuri
                     loadTasks(selectedProject);
                 }
