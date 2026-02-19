@@ -13,3 +13,16 @@
         ```cmd
         ./gradlew run
         ```
+
+### Accesso al Database H2
+
+L'applicazione avvia automaticamente un server web H2 per gestire il database.
+
+1.  **Avviare l'applicazione**: Assicurarsi che l'applicazione sia in esecuzione (tramite `./gradlew run` o IDE).
+2.  **Aprire il Browser**: Andare all'indirizzo `http://localhost:8082`.
+3.  **Inserire le Credenziali**:
+    *   **Driver Class**: `org.h2.Driver`
+    *   **JDBC URL**: `jdbc:h2:./data/jtime_db`
+    *   **User Name**: `admin`
+    *   **Password**: `admin`
+4.  **Connettersi**: Cliccare su "Connect" o "Test Connection".
